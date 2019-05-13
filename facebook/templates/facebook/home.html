@@ -1,0 +1,35 @@
+<!-- templates/home.html -->
+
+ {% extends 'facebook/base.html' %}
+
+    {% block content %}
+      <div class="row">
+        <div class="col-sm-12 mb-3">
+        </div>
+
+        {% for ass in backends.associated %}
+          {% if ass.provider == 'facebook' %}
+            <div class="col-md-6 text-center">
+                <img src="{{ass.extra_data.picture.data.url}}" alt="" width="150" height="150" style="border-radius: 50%">
+            </div>
+            <div class="col-md-6 social-container my-2">                 
+                <p> Name:  {{ ass.extra_data.name }} </p>
+            </div>
+          {% endif %}
+        {% endfor %}
+        <div class="col-sm-12 mt-2 text-center">
+            <form action="{% url 'logout' %}" method="post">
+                {% csrf_token %}
+                {% for ass in backends.associated %}
+                    {% if ass.provider == 'facebook' %}
+                    <input type="hidden" name="email" value="{{ass.extra_data.email}}"></input>
+                    {% endif %}
+                    {% endfor %}
+                    <button class="btn btn-danger">
+                        Logout
+                    </button>
+            </form>
+          
+        </div>
+      </div>
+    {% endblock %}
